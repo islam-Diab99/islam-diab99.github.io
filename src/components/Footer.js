@@ -2,7 +2,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import logo from "../assets/img/logo.svg";
 import navIcon1 from "../assets/img/nav-icon1.svg";
 import navIcon2 from "../assets/img/nav-icon2.svg";
-import navIcon3 from "../assets/img/nav-icon3.svg";
 
 export const Footer = () => {
   return (
@@ -16,7 +15,6 @@ export const Footer = () => {
             <div className="social-icon">
                 <a href="https://www.linkedin.com/in/islamdiab0/"><img src={navIcon1} alt="" /></a>
                 <a href="https://github.com/islam-Diab99"><img src={navIcon2} alt="" /></a>
-                    <a href="https://www.behance.net/islamdiab5"><img src={navIcon3} alt="" /></a>
             </div>
             <p>Copyright 2022. All Rights Reserved</p>
           </Col>

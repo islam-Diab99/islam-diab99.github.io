@@ -1,61 +1,126 @@
-import { Container, Row, Col } from "react-bootstrap";
-import TrackVisibility from "react-on-screen";
+import { Container } from "react-bootstrap";
+import { useInView } from "react-intersection-observer";
+import { motion } from "framer-motion";
 
 export const Experience = () => {
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true
+  });
 
   const experiences = [
-{ 
-  title: "Mid-level Flutter Developer", 
-  company: "Eram Group", 
-  period: "Jan 2025 - Present", 
-  description: "Leading mobile team, streamlining CI/CD, and delivering mission-critical features such as real-time tracking, secure payments, offline support, scalable architecture, advanced performance optimization, and resilient UI with optimistic updates and safe rollback for concurrent requests."
-}, 
-{ 
-  title: "Mid-level Flutter Developer", 
-  company: "Paymac Software Solutions", 
-  period: "Oct 2024 - Jan 2025", 
-  description: "Modernized legacy systems by resolving critical performance bottlenecks, improving cross-device responsiveness, integrating with hardware systems, and ensuring continuous delivery of stable updates." 
-}, 
-{ 
-  title: "Freelance Flutter Developer", 
-  company: "Various Clients", 
-  period: "Jan 2023 - Present", 
-  description: "Designed and developed complete Flutter applications for international clients, handling architecture, UI/UX, integrations, performance improvements, and ensuring client satisfaction with timely deliveries."
-}
+    {
+      title: "Senior Flutter Developer",
+      company: "Eram Group",
+      period: "Jan 2026 - Present",
+      location: "Cairo, Egypt",
+      type: "Full-time",
+      description: "Led end-to-end development of Flutter mobile apps across B2B and B2C products. Owned technical decisions from architecture to production, designed Clean Architecture with MVVM using Bloc/Cubit/Provider, built monorepo structure with shared packages, architected fully automated CI/CD pipeline with multi-flavor environments and automated deployment to App Store and Google Play.",
+      highlights: ["Team Lead", "CI/CD", "Clean Architecture"]
+    },
+    {
+      title: "Mid-level Flutter Developer",
+      company: "Eram Group",
+      period: "Jan 2025 - Dec 2025",
+      location: "Cairo, Egypt",
+      type: "Full-time",
+      description: "Worked on CI/CD implementation, responsive design, and contributed to mission-critical features including real-time tracking, secure payments, offline support, and scalable architecture with performance optimization.",
+      highlights: ["CI/CD", "Performance", "Responsive Design"]
+    },
+    {
+      title: "Mid-level Flutter Developer",
+      company: "Paymac",
+      period: "Jan 2024 - Jan 2025",
+      location: "6th of October, Egypt",
+      type: "Full-time",
+      description: "Refactored and optimized legacy cross-platform ERP system focusing on performance and maintainability. Enhanced hardware integration layers, implemented new features in healthcare applications.",
+      highlights: ["ERP Systems", "Healthcare", "Hardware Integration"]
+    },
+    {
+      title: "Freelance Mobile Developer",
+      company: "Self-employed",
+      period: "Feb 2022 - Jan 2024",
+      location: "Remote",
+      type: "Freelance",
+      description: "Delivered high-quality mobile applications for clients across different industries. Collaborated directly with clients to gather requirements and managed the full application delivery process.",
+      highlights: ["Client Relations", "Full-Stack", "App Store Deployment"]
+    }
   ];
-  
-  return (
-    <section className="experience" id="experience">
-      <Container>
-        <Row>
-          <Col size={12}>
-            <TrackVisibility>
-              {({ isVisible }) =>
-                <div className={isVisible ? "animate__animated animate__fadeIn" : ""}>
-                  <h2>Experience</h2>
-                  <p>Here is my professional journey and work experiences over the years.</p>
 
-                  <Row>
-                    {experiences.map((exp, index) => (
-                      <TrackVisibility key={index} partialVisibility>
-                        {({ isVisible }) => (
-                          <Col md={6} className={`exp-card ${isVisible ? "visible" : ""}`}>
-                            <div className="exp-card-box">
-                              <h4>{exp.title}</h4>
-                              <span>{exp.company} | {exp.period}</span>
-                              <p>{exp.description}</p>
-                            </div>
-                          </Col>
-                        )}
-                      </TrackVisibility>
-                    ))}
-                  </Row>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15 }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" }
+    }
+  };
+
+  return (
+    <section className="experience" id="experience" ref={ref}>
+      <Container>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="experience-header"
+        >
+          <h2>Experience</h2>
+          <p>My professional journey in mobile development</p>
+        </motion.div>
+
+        <motion.div
+          className="timeline"
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
+        >
+          {experiences.map((exp, index) => (
+            <motion.div
+              key={index}
+              className="timeline-item"
+              variants={cardVariants}
+            >
+              <div className="timeline-marker">
+                <div className="marker-dot" />
+                {index < experiences.length - 1 && <div className="marker-line" />}
+              </div>
+
+              <div className="timeline-content">
+                <div className="timeline-header">
+                  <div className="timeline-title-section">
+                    <h4>{exp.title}</h4>
+                    <div className="company-info">
+                      <span className="company-name">{exp.company}</span>
+                      <span className="company-type">{exp.type}</span>
+                    </div>
+                  </div>
+                  <div className="timeline-meta">
+                    <span className="period">{exp.period}</span>
+                    <span className="location">{exp.location}</span>
+                  </div>
                 </div>
-              }
-            </TrackVisibility>
-          </Col>
-        </Row>
+
+                <p className="timeline-description">{exp.description}</p>
+
+                <div className="timeline-highlights">
+                  {exp.highlights.map((highlight, i) => (
+                    <span key={i} className="highlight-tag">{highlight}</span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </Container>
     </section>
-  )
-}
+  );
+};

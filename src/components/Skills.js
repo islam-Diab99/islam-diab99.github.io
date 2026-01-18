@@ -1,65 +1,99 @@
 import { useInView } from 'react-intersection-observer';
-import { useEffect, useState } from 'react';
-import meter1 from "../assets/img/meter1.svg";
-import meter3 from "../assets/img/meter3.svg";
-import meter2    from "../assets/img/meter2.svg";
-
-
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import colorSharp from "../assets/img/color-sharp.png";
+import { motion } from 'framer-motion';
 
 export const Skills = () => {
-  const responsive = {
-    superLargeDesktop: { breakpoint: { max: 4000, min: 3000 }, items: 5 },
-    desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
-    tablet: { breakpoint: { max: 1024, min: 464 }, items: 2 },
-    mobile: { breakpoint: { max: 464, min: 0 }, items: 1 }
-  };
-
   const { ref, inView } = useInView({
-    threshold: 0.2, // لما 20% من العنصر يبقى ظاهر
-    triggerOnce: false // مهم: علشان يتحرك كل مرة يظهر فيها
+    threshold: 0.1,
+    triggerOnce: true
   });
 
-  const [animate, setAnimate] = useState(false);
+  const skills = [
+    { name: "Flutter & Dart", level: "Expert" },
+    { name: "State Management", description: "Bloc, Cubit, Provider", level: "Expert" },
+    { name: "Clean Architecture", description: "MVVM, Design Patterns", level: "Expert" },
+    { name: "CI/CD", description: "GitHub Actions, Fastlane", level: "Expert" },
+    { name: "Firebase", description: "Auth, Firestore, FCM", level: "Expert" },
+    { name: "API Integration", description: "REST & GraphQL", level: "Expert" },
+    { name: "Animations", description: "Implicit & Explicit", level: "Advanced" },
+    { name: "Packages", description: "Dio, Hive, GetIt", level: "Expert" },
+    { name: "Databases", description: "SQLite, MongoDB", level: "Advanced" },
+    { name: "Node.js", description: "REST APIs", level: "Intermediate" },
+    { name: "React.js", description: "Web Development", level: "Intermediate" },
+    { name: "Git & GitHub", description: "Version Control", level: "Expert" },
+  ];
 
-  useEffect(() => {
-    if (inView) {
-      setAnimate(true);
-    } else {
-      setAnimate(false);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.05 }
     }
-  }, [inView]);
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" }
+    }
+  };
 
   return (
     <section className="skill" id="skills" ref={ref}>
-        <div className="container">
-            <div className="row">
-                <div className="col-12">
-                    <div className={`skill-bx ${animate ? 'animate' : ''}`}>
-                        <h2>Skills</h2>
-                        <p>Here’s a quick look at the tools and skills that help me turn ideas into reliable mobile solutions</p>
-                        <Carousel responsive={responsive} infinite={true} className="owl-carousel owl-theme skill-slider">
-<div className="item"><img src={meter1} alt="Image" /><h5>Flutter & Dart</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>State Management (Bloc, Cubit, Provider, Rx)</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>Clean Architecture & Design Patterns</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>CI/CD (GitHub Actions & Fastlane)</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>Firebase & Cloud Integration</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>API Integration (REST & GraphQL)</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>Flutter Animations (Implicit & Explicit)</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>Third-Party Packages (e.g. Dio, Hive, GetIt)</h5></div>
-<div className="item"><img src={meter2} alt="Image" /><h5>Node.js Basics (APIs)</h5></div>
-<div className="item"><img src={meter1} alt="Image" /><h5>Databases (MySQL, SQLite, MongoDB)</h5></div>
-<div className="item"><img src={meter3} alt="Image" /><h5>React.js Basics</h5></div>
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <motion.div
+              className="skill-bx"
+              initial={{ opacity: 0, y: 60 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+            >
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                Skills
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                Technologies and tools I use to build high-quality mobile applications
+              </motion.p>
 
-
-                        </Carousel>
+              <motion.div
+                className="skills-grid"
+                variants={containerVariants}
+                initial="hidden"
+                animate={inView ? "visible" : "hidden"}
+              >
+                {skills.map((skill, index) => (
+                  <motion.div
+                    key={index}
+                    className={`skill-card ${skill.level.toLowerCase()}`}
+                    variants={cardVariants}
+                  >
+                    <div className="skill-card-inner">
+                      <h5>{skill.name}</h5>
+                      {skill.description && (
+                        <span className="skill-description">{skill.description}</span>
+                      )}
+                      <div className="skill-level-indicator">
+                        <span className="level-dot" />
+                        <span className="level-text">{skill.level}</span>
+                      </div>
                     </div>
-                </div>
-            </div>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
-        <img className="background-image-left" src={colorSharp} alt="Image" />
+      </div>
     </section>
-  )
-}
+  );
+};

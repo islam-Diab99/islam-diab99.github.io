@@ -1,50 +1,9 @@
-import { useState, useEffect } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import headerImg from "../assets/img/header-img.svg";
-import { ArrowRightCircle } from 'react-bootstrap-icons';
+import profileImg from "../assets/img/profile.jpg";
 import { motion } from "framer-motion";
 import "../App.css";
 
 export const Banner = () => {
-  const [loopNum, setLoopNum] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [text, setText] = useState('');
-  const [delta, setDelta] = useState(150); // أسرع من قبل
-  const [index, setIndex] = useState(1);
-  const toRotate = [ "Flutter Developer", "Software Engineer", "Problem Solver" ];
-  const period = 1000; // وقت أقل قبل الحذف
-
-  useEffect(() => {
-    let ticker = setInterval(() => {
-      tick();
-    }, delta);
-
-    return () => clearInterval(ticker);
-  }, [text]);
-
-  const tick = () => {
-    let i = loopNum % toRotate.length;
-    let fullText = toRotate[i];
-    let updatedText = isDeleting 
-      ? fullText.substring(0, text.length - 1) 
-      : fullText.substring(0, text.length + 1);
-
-    setText(updatedText);
-
-    if (!isDeleting && updatedText === fullText) {
-      setIsDeleting(true);
-      setDelta(80); // سرعة الحذف
-    } else if (isDeleting && updatedText === '') {
-      setIsDeleting(false);
-      setLoopNum(loopNum + 1);
-      setDelta(150); // سرعة الكتابة
-    }
-  }
-
-  const handleEmailClick = () => {
-    window.location.href = "mailto:idiab604@gmail.com";
-  }
-
   return (
     <section className="banner" id="home">
       <Container>
@@ -59,20 +18,11 @@ export const Banner = () => {
               <span className="tagline">Welcome to my Portfolio</span>
               <h1>
                 Hi! <span className="highlight-name">I'm Islam Diab</span>
-                <span className="txt-rotate">
-                  <span className="wrap">{text}</span>
-                </span>
+                <span className="txt-rotate">Senior Flutter Developer</span>
               </h1>
               <p>
-             Flutter Developer with 3 years of experience turning ideas into smooth, high-performance mobile apps. I enjoy solving problems, polishing UI/UX, and writing clean code that feels good to maintain. Flutter & Dart are my main tools, but I’m always curious to explore new tech. What drives me most is the thrill of shipping something users actually love — and the fun of continuously improving it.
+             Senior Flutter Developer with 4 years of experience building high-performance mobile applications. I architect scalable solutions using Clean Architecture and MVVM, and own the full development lifecycle from design to production. Experienced in CI/CD automation, monorepo structures, and delivering both B2B and B2C products. Passionate about writing clean, maintainable code and driving technical excellence.
               </p>
-              <motion.button 
-                whileHover={{ scale: 1.1 }} 
-                whileTap={{ scale: 0.95 }}
-                onClick={() => window.open("https://drive.google.com/file/d/1WGPM7IWJqx5owaSApxlaEtmd9oAE_pJt/view?usp=sharing", "_blank")}
-              >
-                Download My CV <ArrowRightCircle size={25} />
-              </motion.button>
             </motion.div>
           </Col>
           <Col xs={12} md={6} xl={5}>
@@ -83,10 +33,10 @@ export const Banner = () => {
               viewport={{ once: false }}
               className="header-img-container"
             >
-              <img 
-                src={headerImg} 
-                alt="Header Img" 
-                className="header-img floating"
+              <img
+                src={profileImg}
+                alt="Islam Diab"
+                className="profile-img"
               />
             </motion.div>
           </Col>
